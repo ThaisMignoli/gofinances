@@ -49,5 +49,5 @@ export function HighlightCard({
         </LastTransaction>
       </Footer>
     </Container>
-  )
+  );
 }

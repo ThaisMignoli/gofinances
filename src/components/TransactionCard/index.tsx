@@ -53,5 +53,5 @@ export function TransactionCard({ data } : Props) {
         </Date>
       </Footer>
     </Container>
-  )
+  );
 }
