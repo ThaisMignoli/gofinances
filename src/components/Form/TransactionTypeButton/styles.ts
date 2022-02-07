@@ -24,7 +24,6 @@ export const Container = styled(TouchableOpacity)<ContainerProps>`
   border-radius: 5px;
 
   padding: 16px;
-  margin: 16px 0;
 
   ${( {isActive, type }) => isActive && type === 'down' && css`
     background-color: ${({ theme }) => theme.colors.attention_light};
