@@ -4,6 +4,10 @@ import { Feather } from '@expo/vector-icons';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
+interface CategoryProps{
+  isActive: boolean;
+}
+
 export const Container = styled(GestureHandlerRootView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
@@ -27,12 +31,16 @@ export const Title = styled.Text`
   font-size: ${RFValue(18)}px;
 `;
 
-export const Category = styled.View`
+export const Category = styled.TouchableOpacity<CategoryProps>`
   width: 100%;
   padding: ${RFValue(15)}px;
 
   flex-direction: row;
   align-items: center;
+
+  background-color: ${({ theme, isActive }) => 
+    isActive ? theme.colors.secondary_light : theme.colors.background
+  }
 `; 
 
 export const Icon = styled(Feather)`
