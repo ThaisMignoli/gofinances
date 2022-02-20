@@ -4,10 +4,16 @@ import { MaterialIcons } from "@expo/vector-icons"
 import { useTheme } from "styled-components";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-const { Navigator, Screen } = createBottomTabNavigator();
-
 import { Dashboard } from "../screens/Dashboard";
 import { Register } from "../screens/Register";
+
+export type AppRouterParamList = {
+  Listagem: undefined;
+  Cadastrar: undefined;
+  Resumo: undefined
+}
+
+const { Navigator, Screen } = createBottomTabNavigator<AppRouterParamList>();
 
 export function AppRoutes() {
   const theme = useTheme();
