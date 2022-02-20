@@ -48,6 +48,7 @@ export function CategorySelect({
         style={{ flex: 1, width: '100%'}}
         renderItem={({ item }) => (
           <Category
+            activeOpacity={0.6}
             onPress={() => handleCategorySelect(item)}
             isActive={category.key === item.key}
           >
