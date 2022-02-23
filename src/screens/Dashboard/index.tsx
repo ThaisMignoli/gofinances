@@ -43,7 +43,21 @@ interface HighLightData {
 
 export function Dashboard() {
   const [transactions, setTransactions] = useState<DataListProps[]>([]);
-  const [highLightData, setHighLightData] = useState<HighLightData>({} as HighLightData);
+  const [highLightData, setHighLightData] = useState<HighLightData>({
+    entries: {
+      amount: 'R$0,00',
+      lastTransaction: '',
+    },
+    expenses: {
+      amount: 'R$0,00',
+      lastTransaction: '',
+    },
+    total: {
+      amount: 'R$0,00',
+      lastTransaction: '',
+    },
+
+  } as HighLightData);
   const [isLoading, setIsLoading] = useState(true);
 
   const theme = useTheme();
@@ -52,21 +66,32 @@ export function Dashboard() {
     transactions: DataListProps[],
     type: 'positive' | 'negative'
   ) {
-    const lastTransaction = 
-    Math.max.apply(Math, transactions
-      .filter((transaction) => transaction.type === type)
-      .map((transaction) => new Date(transaction.date).getTime()));
 
-    return Intl.DateTimeFormat('pt-BR', {
-      day: 'numeric',
-      month: 'long',
-    }).format(new Date(lastTransaction));
+    const lastTypeTransactions = 
+    transactions.filter((transaction) => transaction.type === type)
+    .map((transaction) => new Date(transaction.date).getTime());
+    
+    if(lastTypeTransactions.length != 0) {
+      const lastTransaction = Math.max(...lastTypeTransactions);
+
+      return Intl.DateTimeFormat('pt-BR', {
+        day: 'numeric',
+        month: 'long',
+      }).format(new Date(lastTransaction));
+    } else {
+      return null;
+    }
   }
 
   async function loadTransactions() {
     const dataKey = '@gofinances:transactions';
     const response = await AsyncStorage.getItem(dataKey);
     const transactions = response ? JSON.parse(response) : [];
+
+    if(!transactions.length) {
+      setIsLoading(false);
+      return;
+    }
 
     let entriesTotal = 0;
     let expensesTotal = 0;
@@ -84,14 +109,14 @@ export function Dashboard() {
           .toLocaleString('pt-BR', {
             style: 'currency',
             currency: 'BRL'
-          });
+          });     
 
         const date = Intl.DateTimeFormat('pt-BR', {
           day: '2-digit',
           month: '2-digit',
           year: '2-digit'
         }).format(new Date(item.date));
-
+        
         return {
           id: item.id,
           name:  item.name,
@@ -116,14 +141,14 @@ export function Dashboard() {
             style: 'currency',
             currency: 'BRL'
           }),
-          lastTransaction: `Última entrada dia ${lastTransactionEntries}`
+          lastTransaction: lastTransactionEntries ? `Última entrada dia ${lastTransactionEntries}` : ''
         },
         expenses: {
           amount: expensesTotal.toLocaleString('pt-BR', {
             style: 'currency',
             currency: 'BRL'
           }),
-          lastTransaction: `Última saída dia ${lastTransactionExpenses}`
+          lastTransaction: lastTransactionExpenses ? `Última saída dia ${lastTransactionExpenses}` : ''
         },
         total: {
           amount: total.toLocaleString('pt-BR', {
