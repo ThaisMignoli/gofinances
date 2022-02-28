@@ -4,6 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "styled-components";
+import { useAuth } from "../../hooks/auth";
 
 import { HighlightCard } from "../../components/HighlightCard";
 import { TransactionCard, TransactionCardProps } from "../../components/TransactionCard";
@@ -56,9 +57,9 @@ export function Dashboard() {
       amount: 'R$0,00',
       lastTransaction: '',
     },
-
   } as HighLightData);
   const [isLoading, setIsLoading] = useState(true);
+  const { user, signOut } = useAuth();
 
   const theme = useTheme();
 
@@ -185,15 +186,15 @@ export function Dashboard() {
           <UserWrapper>
             <UserInfo>
               <Photo 
-                source={{ uri: 'https://avatars.githubusercontent.com/u/84553072?v=4.png' }}
+                source={{ uri: user.photo }}
                 />
               <User>
                 <UserGreeting>Olá,</UserGreeting>
-                <UserName>Thais</UserName>
+                <UserName>{user.name}</UserName>
               </User>
             </UserInfo>
 
-            <LogoutButton onPress={() => {}}>
+            <LogoutButton onPress={signOut}>
               <Icon name="power"/>
             </LogoutButton>
           </UserWrapper>
